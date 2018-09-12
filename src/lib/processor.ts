@@ -158,7 +158,15 @@ const ODataRequestResult: any = {
 
 const expCalls = {
     $count: function (this: ODataResult) {
-        return this.body && this.body.value ? (this.body.value.length || 0) : 0;
+        if (!this.body || !this.body.value) {
+            return 0;
+        }
+
+        if (typeof this.body.value === 'number') {
+            return this.body.value;
+        }
+
+        return this.body.value.length || 0;
     },
     $value: async function (this: ODataResult, processor) {
         try{
